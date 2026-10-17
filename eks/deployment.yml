@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: netflix-app
-        image: gsharma1298/netflix:3
+        image: gsharma1298/netflix:27
         ports:
         - containerPort: 80
