@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 # --------------------------------------------------
-# Default VPC in us-east-1
+# Default VPC 
 # --------------------------------------------------
 
 data "aws_vpc" "default" {
@@ -46,7 +46,7 @@ data "aws_security_group" "default" {
 # --------------------------------------------------
 
 resource "aws_iam_role" "master" {
-  name = "govind-eks-master-us-east-1"
+  name = "eks-master"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -105,7 +105,7 @@ resource "aws_iam_role" "worker" {
 # --------------------------------------------------
 
 resource "aws_iam_policy" "autoscaler" {
-  name = "eks-autoscaler"
+  name = "govind-eks-autoscaler"
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -176,13 +176,14 @@ resource "aws_iam_instance_profile" "worker" {
 # --------------------------------------------------
 
 resource "aws_eks_cluster" "eks" {
-  name     = "eks"
+  name     = "us-eks"
   role_arn = aws_iam_role.master.arn
 
     # EKS API Access Configuration
   access_config {
     authentication_mode                         = "API_AND_CONFIG_MAP"
     bootstrap_cluster_creator_admin_permissions = true
+}
 
   
   vpc_config {
@@ -194,7 +195,7 @@ resource "aws_eks_cluster" "eks" {
   }
 
   tags = {
-    Name        = "project"
+    Name        = "project-eks"
     Environment = "dev"
     Terraform   = "true"
   }
@@ -212,7 +213,7 @@ resource "aws_eks_cluster" "eks" {
 
 resource "aws_eks_node_group" "node_grp" {
   cluster_name    = aws_eks_cluster.eks.name
-  node_group_name = "project-eks-node-group-us-east-1"
+  node_group_name = "project-eks-node-group"
   node_role_arn   = aws_iam_role.worker.arn
 
   subnet_ids = slice(data.aws_subnets.default.ids, 0, 2)
@@ -226,7 +227,7 @@ resource "aws_eks_node_group" "node_grp" {
   }
 
   tags = {
-    Name = "project-eks-node-group-us-east-1"
+    Name = "eks-node-group-"
   }
 
   scaling_config {
