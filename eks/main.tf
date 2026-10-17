@@ -188,7 +188,7 @@ resource "aws_iam_instance_profile" "worker" {
 # --------------------------------------------------
 
 resource "aws_eks_cluster" "eks" {
-  name     = "us-eks"
+  name     = "eks"
   role_arn = aws_iam_role.master.arn
 
     # EKS API Access Configuration
