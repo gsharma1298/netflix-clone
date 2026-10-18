@@ -41,7 +41,7 @@ resource "aws_instance" "instances" {
   for_each = toset(["server", "monitoring"])
 
   ami           = "ami-01a00762f46d584a1"
-  instance_type = "m7i-flex.large"
+  instance_type = "c7i-flex.large"
 
   subnet_id = data.aws_subnets.default.ids[0]
 
