@@ -93,8 +93,7 @@ pipeline {
         stage("run app"){
             steps{
                 sh '''
-                docker stop netflix
-                docker rm netflix
+                docker rm -f netflix
                 docker run -d --name netflix -p 8081:80 gsharma1298/netflix:${BUILD_NUMBER}
                 '''
             }
